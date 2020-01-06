@@ -1,0 +1,6 @@
+plugin:
+    name: 'codecycler.mollieshopaholic::lang.plugin.name'
+    description: 'codecycler.mollieshopaholic::lang.plugin.description'
+    author: Codecycler
+    icon: oc-icon-euro
+    homepage: ''

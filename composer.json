@@ -1,0 +1,12 @@
+{
+    "name": "codecycler/mollieshopaholic",
+    "authors": [
+        {
+            "name": "Sebastiaan Kloos",
+            "email": "sebastiaan@codecycler.com"
+        }
+    ],
+    "require": {
+        "omnipay/mollie": "^3.1"
+    }
+}
