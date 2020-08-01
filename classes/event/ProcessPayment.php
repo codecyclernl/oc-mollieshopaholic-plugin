@@ -43,12 +43,14 @@ class ProcessPayment
     {
         if (!isset($this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'])) {
             $this->obOrder->status_id = $this->obPaymentMethod->gateway_property['openStatus'];
+            $this->obOrder->payment_response = $this->arPayment;
             $this->obOrder->save();
 
             return;
         }
 
         $this->obOrder->status_id = $this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'];
+        $this->obOrder->payment_response = $this->arPayment;
 
         $this->obOrder->save();
     }

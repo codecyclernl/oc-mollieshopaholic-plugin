@@ -1,5 +1,6 @@
 <?php namespace Codecycler\MollieShopaholic\Classes\Event;
 
+use Cms\Classes\Page;
 use Lang;
 use Omnipay\Omnipay;
 
@@ -60,11 +61,12 @@ class ExtendFieldHandler
         }
 
         $arStatusOptions = $this->getStatusOptions();
+        $arRedirectOptions = $this->getRedirectOptions();
 
         $obWidget->addTabFields([
             'gateway_property[openStatus]' => [
                 'label' => 'Open status',
-                'tab'   => 'Status',
+                'tab'   => 'Mollie',
                 'type'  => 'dropdown',
                 'span'  => 'left',
                 'options' => $arStatusOptions,
@@ -72,7 +74,7 @@ class ExtendFieldHandler
 
             'gateway_property[paidStatus]' => [
                 'label' => 'Paid status',
-                'tab'   => 'Status',
+                'tab'   => 'Mollie',
                 'type'  => 'dropdown',
                 'span'  => 'right',
                 'options' => $arStatusOptions,
@@ -80,7 +82,7 @@ class ExtendFieldHandler
 
             'gateway_property[failedStatus]' => [
                 'label' => 'Failed status',
-                'tab'   => 'Status',
+                'tab'   => 'Mollie',
                 'type'  => 'dropdown',
                 'span'  => 'left',
                 'options' => $arStatusOptions,
@@ -88,7 +90,7 @@ class ExtendFieldHandler
 
             'gateway_property[cancelledStatus]' => [
                 'label' => 'Canceled status',
-                'tab'   => 'Status',
+                'tab'   => 'Mollie',
                 'type'  => 'dropdown',
                 'span'  => 'right',
                 'options' => $arStatusOptions,
@@ -96,16 +98,34 @@ class ExtendFieldHandler
 
             'gateway_property[expiredStatus]' => [
                 'label' => 'Expired status',
-                'tab'   => 'Status',
+                'tab'   => 'Mollie',
                 'type'  => 'dropdown',
                 'span'  => 'left',
                 'options' => $arStatusOptions,
+            ],
+
+            'gateway_property[redirectUrl]' => [
+                'label' => 'Redirect URL',
+                'tab' => 'Mollie',
+                'type' => 'dropdown',
+                'span' => 'left',
+                'placeholder' => 'Emtpy',
+                'options' => $arRedirectOptions,
             ],
         ]);
     }
 
     protected function getStatusOptions()
     {
-        return Status::all()->pluck('name', 'id')->toArray();
+        return Status::all()
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    protected function getRedirectOptions()
+    {
+        return Page::all()
+            ->pluck('url', 'fileName')
+            ->toArray();
     }
 }
