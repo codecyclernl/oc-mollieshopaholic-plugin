@@ -1,6 +1,9 @@
 <?php namespace Codecycler\MollieShopaholic\Classes\Event;
 
+use Lang;
 use Omnipay\Omnipay;
+use Kharanenka\Helper\Result;
+use Lovata\Shopaholic\Models\Settings;
 
 class ProcessPayment
 {
@@ -41,6 +44,17 @@ class ProcessPayment
 
     protected function updateOrderStatus()
     {
+        if ($this->arPayment['status'] == 'paid' && !(bool) Settings::getValue('decrement_offer_quantity')) {
+            foreach ($this->obOrder->order_position as $obPosition) {
+                $obOffer = $obPosition->offer;
+
+                try {
+                    $obOffer->quantity -= $obPosition->quantity;
+                    $obOffer->save();
+                } catch (\Exception $obException) {}
+            }
+        }
+
         if (!isset($this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'])) {
             $this->obOrder->status_id = $this->obPaymentMethod->gateway_property['openStatus'];
             $this->obOrder->payment_response = $this->arPayment;
