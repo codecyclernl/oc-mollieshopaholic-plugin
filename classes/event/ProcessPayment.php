@@ -1,5 +1,6 @@
 <?php namespace Codecycler\MollieShopaholic\Classes\Event;
 
+use DB;
 use Lang;
 use Omnipay\Omnipay;
 use Kharanenka\Helper\Result;
@@ -49,9 +50,14 @@ class ProcessPayment
                 $obOffer = $obPosition->offer;
 
                 try {
-                    $obOffer->quantity -= $obPosition->quantity;
-                    $obOffer->save();
-                } catch (\Exception $obException) {}
+                    DB::table('lovata_shopaholic_offers')
+                        ->where('id', $obOffer->id)
+                        ->update([
+                            'quantity' => $obOffer->quantity -= $obPosition->quantity,
+                        ]);
+                } catch (\Exception $obException) {
+                    \Log::debug($obException);
+                }
             }
         }
 
