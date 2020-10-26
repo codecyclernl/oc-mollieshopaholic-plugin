@@ -50,11 +50,8 @@ class ProcessPayment
                 $obOffer = $obPosition->offer;
 
                 try {
-                    DB::table('lovata_shopaholic_offers')
-                        ->where('id', $obOffer->id)
-                        ->update([
-                            'quantity' => $obOffer->quantity -= $obPosition->quantity,
-                        ]);
+                    $obOffer->quantity = $obOffer->quantity -= $obPosition->quantity;
+                    $obOffer->save();
                 } catch (\Exception $obException) {
                     \Log::debug($obException);
                 }

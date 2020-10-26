@@ -14,6 +14,6 @@ class PaymentReturnUrl
         $obRouter = new Router;
         $obPage = Page::find($obPaymentMethod->gateway_property['redirectUrl']);
 
-        return  $obRouter->urlFromPattern($obPage->url, $obOrder->toArray());
+        return $obRouter->urlFromPattern($obPage->url, $obOrder->toArray());
     }
 }
