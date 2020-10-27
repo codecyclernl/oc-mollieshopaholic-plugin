@@ -2,6 +2,7 @@
 
 use DB;
 use Lang;
+use Cache;
 use Omnipay\Omnipay;
 use Kharanenka\Helper\Result;
 use Lovata\Shopaholic\Models\Settings;
@@ -46,6 +47,10 @@ class ProcessPayment
     protected function updateOrderStatus()
     {
         if ($this->arPayment['status'] == 'paid' && !(bool) Settings::getValue('decrement_offer_quantity')) {
+            if (Cache::has('payment_' . $this->arPayment['id'])) {
+                return;
+            }
+
             foreach ($this->obOrder->order_position as $obPosition) {
                 $obOffer = $obPosition->offer;
 
@@ -56,6 +61,8 @@ class ProcessPayment
                     \Log::debug($obException);
                 }
             }
+
+            Cache::forever('payment_' . $this->arPayment['id'], true);
         }
 
         if (!isset($this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'])) {
