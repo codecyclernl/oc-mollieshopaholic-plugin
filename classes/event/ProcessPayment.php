@@ -4,7 +4,6 @@ use DB;
 use Lang;
 use Cache;
 use Omnipay\Omnipay;
-use Kharanenka\Helper\Result;
 use Lovata\Shopaholic\Models\Settings;
 use Lovata\OrdersShopaholic\Classes\Processor\CartProcessor;
 
