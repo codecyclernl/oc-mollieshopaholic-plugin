@@ -6,6 +6,7 @@ use Cache;
 use Omnipay\Omnipay;
 use Kharanenka\Helper\Result;
 use Lovata\Shopaholic\Models\Settings;
+use Lovata\OrdersShopaholic\Classes\Processor\CartProcessor;
 
 class ProcessPayment
 {
@@ -70,6 +71,11 @@ class ProcessPayment
             }
 
             Cache::forever('payment_' . $this->arPayment['id'], true);
+        }
+
+        // Clear cart if order is paid
+        if ($this->arPayment['status'] == 'paid') {
+            CartProcessor::instance()->clear();
         }
 
         // Order status does not exist in the config of the gateway
