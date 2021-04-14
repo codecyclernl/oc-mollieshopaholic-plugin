@@ -88,7 +88,7 @@ class ExtendFieldHandler
                 'options' => $arStatusOptions,
             ],
 
-            'gateway_property[cancelledStatus]' => [
+            'gateway_property[canceledStatus]' => [
                 'label' => 'Canceled status',
                 'tab'   => 'Mollie',
                 'type'  => 'dropdown',
