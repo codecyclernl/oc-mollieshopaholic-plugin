@@ -46,7 +46,14 @@ class ProcessPayment
 
     protected function updateOrderStatus()
     {
-        if ($this->arPayment['status'] == 'paid' && !(bool) Settings::getValue('decrement_offer_quantity')) {
+        // Order status id
+        $iResponseStatus = $this->obPaymentMethod
+            ->gateway_property[$this->arPayment['status'] . 'Status'];
+
+        // Check if order status is different from the known status
+        $bOrderStatusChanged = ($this->obOrder->status_id != $iResponseStatus);
+
+        if ($this->arPayment['status'] == 'paid' && !(bool) Settings::getValue('decrement_offer_quantity') && $bOrderStatusChanged) {
             if (Cache::has('payment_' . $this->arPayment['id'])) {
                 return;
             }
@@ -65,6 +72,7 @@ class ProcessPayment
             Cache::forever('payment_' . $this->arPayment['id'], true);
         }
 
+        // Order status does not exist in the config of the gateway
         if (!isset($this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'])) {
             $this->obOrder->status_id = $this->obPaymentMethod->gateway_property['openStatus'];
             $this->obOrder->payment_response = $this->arPayment;

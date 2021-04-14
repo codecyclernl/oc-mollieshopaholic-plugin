@@ -1,5 +1,6 @@
 {
-    "name": "codecycler/mollieshopaholic",
+    "name": "codecycler/oc-mollieshopaholic-plugin",
+    "type": "october-plugin",
     "authors": [
         {
             "name": "Sebastiaan Kloos",
@@ -9,5 +10,6 @@
     "require": {
         "omnipay/omnipay": "^3.0",
         "omnipay/mollie": "^5.2"
-    }
+    },
+    "description": ""
 }
