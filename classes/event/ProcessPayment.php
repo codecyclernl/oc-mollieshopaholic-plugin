@@ -53,6 +53,12 @@ class ProcessPayment
         // Check if order status is different from the known status
         $bOrderStatusChanged = ($this->obOrder->status_id != $iResponseStatus);
 
+        // Clear cart if order is paid
+        if ($this->arPayment['status'] == 'paid') {
+            CartProcessor::instance()->clear();
+        }
+
+        //
         if ($this->arPayment['status'] == 'paid' && !(bool) Settings::getValue('decrement_offer_quantity') && $bOrderStatusChanged) {
             if (Cache::has('payment_' . $this->arPayment['id'])) {
                 return;
@@ -70,11 +76,6 @@ class ProcessPayment
             }
 
             Cache::forever('payment_' . $this->arPayment['id'], true);
-        }
-
-        // Clear cart if order is paid
-        if ($this->arPayment['status'] == 'paid') {
-            CartProcessor::instance()->clear();
         }
 
         // Order status does not exist in the config of the gateway
