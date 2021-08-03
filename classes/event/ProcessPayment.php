@@ -80,16 +80,14 @@ class ProcessPayment
 
         // Order status does not exist in the config of the gateway
         if (!isset($this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'])) {
-            $this->obOrder->status_id = $this->obPaymentMethod->gateway_property['openStatus'];
-            $this->obOrder->payment_response = $this->arPayment;
-            $this->obOrder->save();
-
             return;
         }
 
-        $this->obOrder->status_id = $this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'];
-        $this->obOrder->payment_response = $this->arPayment;
+        if ($bOrderStatusChanged) {
+            $this->obOrder->status_id = $this->obPaymentMethod->gateway_property[$this->arPayment['status'] . 'Status'];
+            $this->obOrder->payment_response = $this->arPayment;
 
-        $this->obOrder->save();
+            $this->obOrder->save();
+        }
     }
 }
